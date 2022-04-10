@@ -34,8 +34,6 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-      - name: Update composer version
-        run: composer self-update --1
       - name: Cache composer dependencies
         id: composer-cache-restore
         uses: actions/cache@v3
