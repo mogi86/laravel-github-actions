@@ -15,7 +15,7 @@ jobs:
           MYSQL_DATABASE: laravel
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
         ports:
-          - 33060:3306
+          - 3306:3306
       redis:
         image: redis
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
@@ -34,6 +34,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+      - name: Connect to MySQL
+        run: mysql -u root -p password -p 3306 -D laravel -e  "show tables"
       - name: Cache composer dependencies
         id: composer-cache-restore
         uses: actions/cache@v3
