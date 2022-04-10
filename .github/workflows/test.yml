@@ -35,9 +35,9 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
       - name: Connect to MySQL
-        run: mysql -uroot -ppassword -hlocalhost -P3306 -Dlaravel -e  "show tables"
+        run: mysql -uroot -ppassword -h0.0.0.0 -P3306 -Dlaravel -e  "show tables"
         env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
+          DB_PORT: 3306
       - name: Cache composer dependencies
         id: composer-cache-restore
         uses: actions/cache@v3
