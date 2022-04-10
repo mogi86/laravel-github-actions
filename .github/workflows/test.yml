@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
 
     services:
       mysql:
@@ -35,7 +35,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
       - name: Connect to MySQL
-        run: mysql -uroot -ppassword -P3306 -Dlaravel -e  "show tables"
+        run: mysql -uroot -ppassword -hlocalhost -P3306 -Dlaravel -e  "show tables"
       - name: Cache composer dependencies
         id: composer-cache-restore
         uses: actions/cache@v3
