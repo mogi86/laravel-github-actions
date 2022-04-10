@@ -52,11 +52,5 @@ jobs:
         run: php artisan config:clear
       - name: Database Migration
         run: php artisan migrate
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
       - name: Execute test
         run: ./vendor/bin/phpunit ./tests
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
