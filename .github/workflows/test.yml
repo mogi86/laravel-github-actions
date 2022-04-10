@@ -13,14 +13,14 @@ jobs:
           MYSQL_ALLOW_EMPTY_PASSWORD: false
           MYSQL_ROOT_PASSWORD: password
           MYSQL_DATABASE: laravel
-        ports:
-          - 3306/tcp
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        ports:
+          - 3306:3306
       redis:
         image: redis
-        ports:
-          - 6379/tcp
         options: --health-cmd="redis-cli ping" --health-interval=10s --health-timeout=5s --health-retries=3
+        ports:
+          - 6379:6379
 
     strategy:
       fail-fast: false
@@ -34,6 +34,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+      - name: Connect to MySQL
+        run: mysql -uroot -ppassword -h0.0.0.0 -P3306 -Dlaravel -e  "show databases"
       - name: Cache composer dependencies
         id: composer-cache-restore
         uses: actions/cache@v3
@@ -52,11 +54,5 @@ jobs:
         run: php artisan config:clear
       - name: Database Migration
         run: php artisan migrate
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
       - name: Execute test
         run: ./vendor/bin/phpunit ./tests
-        env:
-          DB_PORT: ${{ job.services.mysql.ports['3306'] }}
-          REDIS_PORT: ${{ job.services.redis.ports['6379'] }}
